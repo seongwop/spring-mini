@@ -18,26 +18,27 @@ public class ProductController {
 
     @GetMapping("/get/{id}")
     public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id) {
-        return productService.getProduct(id);
+        return ResponseEntity.ok(productService.getProduct(id));
     }
     @GetMapping("/get")
     public ResponseEntity<List<ProductResponse>> getProducts() {
-        return productService.getAllProducts();
+        return ResponseEntity.ok(productService.getAllProducts());
     }
 
     @PostMapping("/create")
     public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductCreateRequest productCreateRequest) {
-        return productService.createProduct(productCreateRequest);
+        return ResponseEntity.ok(productService.createProduct(productCreateRequest));
     }
 
     @PostMapping("/update/{id}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id,
                                          @RequestBody ProductUpdateRequest productUpdateRequest) {
-        return productService.updateProduct(id, productUpdateRequest);
+        return ResponseEntity.ok(productService.updateProduct(id, productUpdateRequest));
     }
 
     @PostMapping("/delete/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
-        return productService.deleteProduct(id);
+        productService.deleteProduct(id);
+        return ResponseEntity.ok().build();
     }
 }

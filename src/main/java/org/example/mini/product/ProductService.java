@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.mini.product.dto.ProductCreateRequest;
 import org.example.mini.product.dto.ProductResponse;
 import org.example.mini.product.dto.ProductUpdateRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +17,7 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public ResponseEntity<ProductResponse> createProduct(ProductCreateRequest productCreateRequest) {
+    public ProductResponse createProduct(ProductCreateRequest productCreateRequest) {
         String name = productCreateRequest.name();
         Integer price = productCreateRequest.price();
         Integer stock = productCreateRequest.stock();
@@ -26,43 +25,42 @@ public class ProductService {
 
         productRepository.save(product);
 
-        return ResponseEntity.ok(ProductResponse.from(product));
+        return ProductResponse.from(product);
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<ProductResponse> getProduct(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(
+    public ProductResponse getProduct(Long id) {
+        Product product = productRepository.findByIdAndDeleted(id, false).orElseThrow(
                 () -> new IllegalArgumentException("Product not found with id " + id)
         );
-        return ResponseEntity.ok(ProductResponse.from(product));
+        return ProductResponse.from(product);
     }
 
-    public ResponseEntity<List<ProductResponse>> getAllProducts() {
-        List<Product> products = productRepository.findAll();
-        return ResponseEntity.ok(products.stream().map(ProductResponse::from).toList());
+    public List<ProductResponse> getAllProducts() {
+        List<Product> products = productRepository.findAllByDeleted(false);
+        return products.stream().map(ProductResponse::from).toList();
     }
 
     @Transactional
-    public ResponseEntity<ProductResponse> updateProduct(Long id, ProductUpdateRequest productUpdateRequest) {
+    public ProductResponse updateProduct(Long id, ProductUpdateRequest productUpdateRequest) {
         String name = productUpdateRequest.name();
         Integer price = productUpdateRequest.price();
         Integer stock = productUpdateRequest.stock();
 
-        Product product = productRepository.findById(id).orElseThrow(
+        Product product = productRepository.findByIdAndDeleted(id, false).orElseThrow(
                 () -> new IllegalArgumentException("Product not found with id " + id)
         );
 
         product.updateProduct(name, price, stock);
 
-        return ResponseEntity.ok(ProductResponse.from(product));
+        return ProductResponse.from(product);
     }
 
     @Transactional
-    public ResponseEntity<?> deleteProduct(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(
+    public void deleteProduct(Long id) {
+        Product product = productRepository.findByIdAndDeleted(id, false).orElseThrow(
                 () -> new IllegalArgumentException("Product not found with id " + id)
         );
         product.deleteProduct();
-        return ResponseEntity.ok().build();
     }
 }

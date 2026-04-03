@@ -2,6 +2,10 @@ package org.example.mini.product;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProductRepository extends JpaRepository<Product, Long> {
+import java.util.List;
+import java.util.Optional;
 
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    Optional<Product> findByIdAndDeleted(Long id, boolean deleted);
+    List<Product> findAllByDeleted(boolean deleted);
 }
