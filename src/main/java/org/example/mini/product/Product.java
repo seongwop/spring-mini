@@ -22,15 +22,27 @@ public class Product {
     @Column(nullable = false)
     private Integer price;
 
-    public static Product createProduct(String name, Integer price){
+    @Column(nullable = false)
+    private Integer stock;
+
+    public static Product createProduct(String name, Integer price, Integer stock) {
         Product product = new Product();
         product.name = name;
         product.price = price;
+        product.stock = stock;
         return product;
     }
 
-    public void updateProduct(String name, Integer price){
+    public void updateProduct(String name, Integer price, Integer stock) {
         this.name = name;
         this.price = price;
+        this.stock = stock;
+    }
+
+    public void decreaseStock() {
+        if (stock <= 0) {
+            throw new IllegalStateException("No stock");
+        }
+        this.stock--;
     }
 }

@@ -29,6 +29,7 @@ public class OrderService {
                 () -> new IllegalArgumentException("product not found")
         );
         Order order = Order.createOrder(product);
+        order.getProduct().decreaseStock();
 
         orderRepository.save(order);
 

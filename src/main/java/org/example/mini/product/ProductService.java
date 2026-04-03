@@ -21,7 +21,8 @@ public class ProductService {
     public ResponseEntity<ProductResponse> createProduct(ProductCreateRequest productCreateRequest) {
         String name = productCreateRequest.name();
         Integer price = productCreateRequest.price();
-        Product product = Product.createProduct(name,price);
+        Integer stock = productCreateRequest.stock();
+        Product product = Product.createProduct(name, price, stock);
 
         productRepository.save(product);
 
@@ -45,12 +46,13 @@ public class ProductService {
     public ResponseEntity<ProductResponse> updateProduct(Long id, ProductUpdateRequest productUpdateRequest) {
         String name = productUpdateRequest.name();
         Integer price = productUpdateRequest.price();
+        Integer stock = productUpdateRequest.stock();
 
         Product product = productRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("Product not found with id " + id)
         );
 
-        product.updateProduct(name, price);
+        product.updateProduct(name, price, stock);
 
         return ResponseEntity.ok(ProductResponse.from(product));
     }
