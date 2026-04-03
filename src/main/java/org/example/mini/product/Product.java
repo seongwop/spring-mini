@@ -25,6 +25,8 @@ public class Product {
     @Column(nullable = false)
     private Integer stock;
 
+    private boolean deleted;
+
     public static Product createProduct(String name, Integer price, Integer stock) {
         Product product = new Product();
         product.name = name;
@@ -37,6 +39,10 @@ public class Product {
         this.name = name;
         this.price = price;
         this.stock = stock;
+    }
+
+    public void deleteProduct() {
+        this.deleted = true;
     }
 
     public void decreaseStock() {

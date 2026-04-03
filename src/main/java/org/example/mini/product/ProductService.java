@@ -62,7 +62,7 @@ public class ProductService {
         Product product = productRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("Product not found with id " + id)
         );
-        productRepository.delete(product);
+        product.deleteProduct();
         return ResponseEntity.ok().build();
     }
 }
