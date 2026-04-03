@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.example.mini.product.Product;
 
 @Entity
+@Table(name = "orders")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
